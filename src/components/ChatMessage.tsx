@@ -3,8 +3,13 @@
 import React from 'react';
 import { IMessage } from '@sparkstrand/chat-api-client/types';
 
+// Extend IMessage to include the edited property
+interface ExtendedMessage extends IMessage {
+  edited?: boolean;
+}
+
 interface ChatMessageProps {
-  message: IMessage;
+  message: ExtendedMessage;
   currentUserId: string;
 }
 

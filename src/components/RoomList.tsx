@@ -52,12 +52,12 @@ const RoomList: React.FC<RoomListProps> = ({
             onClick={() => onRoomSelect(room.id)}
           >
             <div className="flex items-center w-full">
-              <div className={`w-2 h-2 rounded-full ${room.onlineMembersCount > 0 ? 'bg-green-500' : 'bg-gray-400'} mr-2`}></div>
+              <div className={`w-2 h-2 rounded-full ${(room.onlineMembersCount || 0) > 0 ? 'bg-green-500' : 'bg-gray-400'} mr-2`}></div>
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <span className="font-medium truncate">{room.name}</span>
                   <span className="text-xs text-gray-500">
-                    {new Date(room.updatedAt).toLocaleDateString()}
+                    {room.updatedAt ? new Date(room.updatedAt).toLocaleDateString() : 'No date'}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-xs text-gray-500">

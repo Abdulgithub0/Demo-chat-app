@@ -3,8 +3,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useSparkStrandChat } from '@sparkstrand/chat-api-client/hooks';
-import { IMessage, UserStatus, SocketEvent, RoomType } from '@sparkstrand/chat-api-client/types';
+import { IMessage, UserStatus, SocketEvent, RoomType, IRoom } from '@sparkstrand/chat-api-client/types';
 
+// Define a custom message type that includes all IMessage properties plus tempId
+type ExtendedMessage = IMessage & {
+  tempId?: string;
+}
 import ChatHeader from './ChatHeader';
 import RoomList from './RoomList';
 import ChatMessage from './ChatMessage';
@@ -49,7 +53,7 @@ const ChatApp: React.FC<ChatAppProps> = ({ externalId }) => {
   useEffect(() => {
     if (originalState.rooms && originalState.rooms.length > 0 && !localState.currentRoomId) {
       // Find a room with messages if possible
-      const roomWithMessages = originalState.rooms.find(room => room.messages && room.messages.length > 0);
+      const roomWithMessages = originalState.rooms.find((room: IRoom) => room.messages && room.messages.length > 0);
 
       // Otherwise use the first room
       const roomToSelect = roomWithMessages || originalState.rooms[0];
@@ -80,7 +84,7 @@ const ChatApp: React.FC<ChatAppProps> = ({ externalId }) => {
   }, [externalId, clientToken]);
 
   // Add a custom event listener for new messages
-  const [localMessages, setLocalMessages] = useState<IMessage[]>([]);
+  const [localMessages, setLocalMessages] = useState<ExtendedMessage[]>([]);
   const [playNotification, setPlayNotification] = useState(false);
   const [lastMessageRoomId, setLastMessageRoomId] = useState<string | null>(null);
 
@@ -141,7 +145,7 @@ const ChatApp: React.FC<ChatAppProps> = ({ externalId }) => {
       socket.sendMessage(messageToSend);
 
       // Create a temporary local message for immediate display
-      const tempMessage: IMessage = {
+      const tempMessage: ExtendedMessage = {
         id: tempId, // Use the same tempId as the key
         text,
         from: { id: originalState.user?.id || '', type: 'guest' },
@@ -258,7 +262,7 @@ const ChatApp: React.FC<ChatAppProps> = ({ externalId }) => {
 
   // Filter local messages for the current room
   const localRoomMessages = localMessages.filter(
-    (message: IMessage) => message.roomId === localState.currentRoomId || message.to === localState.currentRoomId
+    (message: ExtendedMessage) => message.roomId === localState.currentRoomId || message.to === localState.currentRoomId
   );
 
   // Combine all sources of messages and sort by creation date
@@ -400,7 +404,7 @@ const ChatApp: React.FC<ChatAppProps> = ({ externalId }) => {
                   : "Select a room to start chatting"}
               </div>
             ) : (
-              currentRoomMessages.map((message: IMessage) => (
+              currentRoomMessages.map((message) => (
                 <ChatMessage
                   key={message.id}
                   message={message}
