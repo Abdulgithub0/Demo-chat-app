@@ -29,7 +29,9 @@ const ChatApp: React.FC<ChatAppProps> = ({ externalId }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const chatServerUrl = process.env.NEXT_PUBLIC_CHAT_SERVER_URL || 'https://chat-application-h0xp.onrender.com';
-  const { socket, state: originalState } = useSparkStrandChat(chatServerUrl, clientToken, { debug: true, autoConnect: false });
+  const publicKey = process.env.NEXT_PUBLIC_CHAT_API_KEY as string;
+  console.log('publicKey', publicKey);
+  const { socket, state: originalState } = useSparkStrandChat(chatServerUrl, clientToken, publicKey, { debug: true, autoConnect: false });
 
   // Create a local state that we can update immediately
   const [localState, setLocalState] = useState({

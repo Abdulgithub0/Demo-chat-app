@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const chatServerUrl = process.env.NEXT_PUBLIC_CHAT_SERVER_URL || 'https://chat-application-h0xp.onrender.com';
     const response = await axios.post(`${chatServerUrl}/api/v1/guests/initiate`, {
-      apiKey: process.env.CHAT_API_KEY,
+      apiKey: process.env.NEXT_PUBLIC_CHAT_API_KEY,
       apiKeySecret: process.env.CHAT_API_SECRET,
       metaData: { 
         externalId,

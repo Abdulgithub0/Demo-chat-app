@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sparkstrand/chat-api-client": "^0.0.4",
+    "@sparkstrand/chat-api-client": "^0.0.5",
     "axios": "^1.6.0",
     "howler": "^2.2.4",
     "next": "^14.0.0",
